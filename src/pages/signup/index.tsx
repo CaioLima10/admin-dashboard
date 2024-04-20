@@ -3,6 +3,7 @@ import { Input } from "../../components/input";
 import { Button } from "../../components/button";
 import { useState } from "react";
 import { useAuth } from "../../context/hooks";
+import { Label } from "../../components/label";
 
 export function Signup() {
   const navigate = useNavigate();
@@ -34,40 +35,53 @@ export function Signup() {
   }
 
   return (
-    <form>
-      <h1>Registre sua conta</h1>
-      <div className="flex flex-col gap-4">
-        <Input
-          value={email}
-          onChange={(event) => [setEmail(event.target.value), setError("")]}
-          placeholder="digite um email"
-          type="text"
-        />
-        <Input
-          value={emailConfirm}
-          onChange={(event) => [
-            setEmailConfirm(event.target.value),
-            setError(""),
-          ]}
-          placeholder="confirme o email"
-          type="text"
-        />
-        <Input
-          value={password}
-          onChange={(event) => [setPassword(event.target.value), setError("")]}
-          placeholder="digite sua senha"
-          type="password"
-        />
-        <span>{error}</span>
-        <Button type="button" onClick={handleSignup}>
-          Inscreva-se
-        </Button>
+    <section className="flex">
+      <div className="flex items-center bg-zinc-950 w-full max-w-5xl h-screen"></div>
+      <form className="w-full max-w-2xl h-screen bg-zinc-900 flex flex-col items-center justify-center">
+        <h1 className="mb-4 text-2xl font-bold text-zinc-300">
+          Registre sua conta
+        </h1>
+        <div className="w-full flex flex-col items-center ">
+          <Label>E-mail</Label>
+          <Input
+            value={email}
+            onChange={(event) => [setEmail(event.target.value), setError("")]}
+            placeholder="Seu e-mail"
+            type="text"
+          />
+          <Label>Confirmar E-mail</Label>
+          <Input
+            value={emailConfirm}
+            onChange={(event) => [
+              setEmailConfirm(event.target.value),
+              setError(""),
+            ]}
+            placeholder="Seu e-mail"
+            type="text"
+          />
+          <Label>Senha</Label>
+          <Input
+            value={password}
+            onChange={(event) => [
+              setPassword(event.target.value),
+              setError(""),
+            ]}
+            placeholder="Sua senha"
+            type="password"
+          />
+          <span className="flex items-center text-red-500">{error}</span>
+          <Button type="button" onClick={handleSignup}>
+            Entrar
+          </Button>
 
-        <div>
-          <span>eu já tenho conta?</span>
-          <Link to={"/"}>&nbsp;Entre</Link>
+          <div className="w-full max-w-md mt-2 ">
+            <span className="text-zinc-400">Já tenho conta?</span>
+            <Link className="text-blue-500" to={"/signin"}>
+              &nbsp;Entrar
+            </Link>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </section>
   );
 }
