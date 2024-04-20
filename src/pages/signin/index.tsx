@@ -31,12 +31,12 @@ export function Signin() {
 
   return (
     <section className="flex">
-      <div className="flex items-center bg-zinc-950 w-full max-w-5xl h-screen"></div>
-      <form className="w-full max-w-2xl h-screen bg-zinc-900 flex flex-col items-center justify-center">
+      <div className="hidden md:flex items-center bg-zinc-950 w-full max-w-5xl h-screen"></div>
+      <form className="w-full md:max-w-2xl h-screen bg-zinc-900 flex flex-col items-center justify-center duration-300">
         <h1 className="mb-4 text-2xl font-bold text-zinc-300">
           Acessar sua conta
         </h1>
-        <div className="w-full flex flex-col items-center ">
+        <div className="w-[80%] flex flex-col items-center ">
           <Label>E-mail</Label>
           <Input
             value={email}
@@ -54,7 +54,7 @@ export function Signin() {
             placeholder="Sua senha"
             type="password"
           />
-          <span>{error}</span>
+          <span className="flex items-center text-red-500 mt-2">{error}</span>
           <Button type="button" onClick={handleLogin}>
             Registrar
           </Button>
