@@ -10,7 +10,7 @@ export function Signin() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   function handleLogin() {
     if (!email || !password) {
@@ -18,10 +18,10 @@ export function Signin() {
       return;
     }
 
-    const res = signin(email, password);
+    const errorMessage = signin(email, password);
 
-    if (res) {
-      setError(res);
+    if (errorMessage !== null && errorMessage !== undefined) {
+      setError(errorMessage);
       return;
     }
 

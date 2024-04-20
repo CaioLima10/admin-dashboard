@@ -11,7 +11,7 @@ export function Signup() {
   const [email, setEmail] = useState("");
   const [emailConfirm, setEmailConfirm] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   function handleSignup() {
     if (!email || !emailConfirm || !password) {
@@ -22,10 +22,10 @@ export function Signup() {
       return;
     }
 
-    const res = signup(email, password);
+    const errorMessage = signup(email, password);
 
-    if (res) {
-      setError(res);
+    if (errorMessage !== null && errorMessage !== undefined) {
+      setError(errorMessage);
       return;
     }
 
