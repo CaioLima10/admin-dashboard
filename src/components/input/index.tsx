@@ -18,7 +18,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         type={type}
         className="outline-none p-3 w-full max-w-md rounded-md text-base bg-zinc-950/60 
         border-none ring-1 ring-zinc-800 placeholder:text-zinc-600 text-zinc-600
-        focus:ring-green-500
+        focus:ring-yellow-400
         "
       />
     );
