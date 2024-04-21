@@ -5,7 +5,7 @@ export interface IContextData {
   user: IUserAuthProps | null;
   signed: boolean;
   signin: (email: string, password: string) => void;
-  signup: (email: string, password: string) => void;
+  signup: (email: string, password: string, name: string) => void;
 
   signout: () => void;
 }
@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }: IUserProviderProps) => {
       if (hasUser[0].email === email && hasUser[0].password === password) {
         const token = Math.random().toString(36).substring(2);
         localStorage.setItem("user_token", JSON.stringify({ email, token }));
-        setUser(hasUser);
+        setUser(hasUser[0]);
         return;
       } else {
         return "E-mail ou senha incorreta";
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: IUserProviderProps) => {
     }
   };
 
-  const signup = (email: string, password: string) => {
+  const signup = (email: string, password: string, name: string) => {
     const usersStorage = JSON.parse(localStorage.getItem("users_db") || "[]");
 
     const hasUser = usersStorage?.filter(
@@ -64,9 +64,9 @@ export const AuthProvider = ({ children }: IUserProviderProps) => {
     let newUser;
 
     if (usersStorage) {
-      newUser = [...usersStorage, { email, password }];
+      newUser = [...usersStorage, { email, password, name }];
     } else {
-      newUser = [{ email, password }];
+      newUser = [{ email, password, name }];
     }
 
     localStorage.setItem("users_db", JSON.stringify(newUser));
