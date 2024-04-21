@@ -6,29 +6,35 @@ export interface IContextData {
   signed: boolean;
   signin: (email: string, password: string) => void;
   signup: (email: string, password: string, name: string) => void;
-
   signout: () => void;
 }
 
 export const AuthContext = createContext<IContextData>({} as IContextData);
 
 export const AuthProvider = ({ children }: IUserProviderProps) => {
-  const [user, setUser] = useState<IUserAuthProps | null>(null);
+  const [signed, setSigned] = useState(() => {
+    const isSigned = localStorage.getItem("isSigned");
+    return isSigned === "true";
+  });
 
   useEffect(() => {
-    const userToken = localStorage.getItem("users_token");
+    localStorage.setItem("isSigned", signed ? "true" : "false");
+  }, [signed]);
+
+  const [user, setUser] = useState<IUserAuthProps | null>(() => {
+    const userToken = localStorage.getItem("user_token");
     const usersStorage = localStorage.getItem("users_db");
 
     if (userToken && usersStorage) {
-      const hasUser = JSON.parse(usersStorage)?.filter(
-        (user: IUserAuthProps) => user.email === JSON.parse(userToken).email
+      const email = JSON.parse(userToken).email;
+      const user = JSON.parse(usersStorage).find(
+        (u: IUserAuthProps) => u.email === email
       );
-
-      if (hasUser) setUser(hasUser[0]);
+      return user || null;
     }
-  }, []);
 
-  const signed = !!user;
+    return null;
+  });
 
   const signin = (email: string, password: string) => {
     const usersStorage = JSON.parse(localStorage.getItem("users_db") || "[]");
@@ -36,6 +42,8 @@ export const AuthProvider = ({ children }: IUserProviderProps) => {
     const hasUser = usersStorage?.filter(
       (user: IUserAuthProps) => user.email === email
     );
+
+    setSigned(true);
 
     if (hasUser?.length) {
       if (hasUser[0].email === email && hasUser[0].password === password) {
@@ -47,7 +55,7 @@ export const AuthProvider = ({ children }: IUserProviderProps) => {
         return "E-mail ou senha incorreta";
       }
     } else {
-      return "Usuario não cadastrado";
+      return "Usuário não cadastrado";
     }
   };
 
@@ -58,17 +66,13 @@ export const AuthProvider = ({ children }: IUserProviderProps) => {
       (user: IUserAuthProps) => user.email === email
     );
 
+    setSigned(false);
+
     if (hasUser?.length) {
-      return "Já tem uma conta com esse E-mail";
-    }
-    let newUser;
-
-    if (usersStorage) {
-      newUser = [...usersStorage, { email, password, name }];
-    } else {
-      newUser = [{ email, password, name }];
+      return "Já existe uma conta com este e-mail";
     }
 
+    const newUser = [...usersStorage, { email, password, name }];
     localStorage.setItem("users_db", JSON.stringify(newUser));
 
     return;
@@ -76,7 +80,7 @@ export const AuthProvider = ({ children }: IUserProviderProps) => {
 
   const signout = () => {
     setUser(null);
-    localStorage.removeItem("users_token");
+    localStorage.removeItem("user_token");
   };
 
   return (
